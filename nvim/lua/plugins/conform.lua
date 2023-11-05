@@ -57,12 +57,7 @@ return {
       return args
     end
 
-    local beautysh = require('conform.formatters.beautysh')
-    conform.formatters.beautysh = function(bufnr)
-      local config = beautysh(bufnr)
-      config.args = util.extend_args(config.args,
-        { '--index-size', '2', '--force-function-style', 'fnpar' })
-      return config
-    end
+    -- local beautysh = require('conform.formatters.beautysh')
+    require('conform.formatters.beautysh').args = { '--index-size', '2', '--force-function-style', 'fnpar' }
   end,
 }
