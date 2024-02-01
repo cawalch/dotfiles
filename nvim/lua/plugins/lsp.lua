@@ -2,7 +2,7 @@ return {
   {
     'onsails/lspkind-nvim',
     init = function()
-      return {mode = 'symbol'}
+      return { mode = 'symbol' }
     end,
   },
 
@@ -10,11 +10,11 @@ return {
     'nvimdev/lspsaga.nvim',
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
-      {'nvim-tree/nvim-web-devicons', lazy = true},
+      { 'nvim-tree/nvim-web-devicons', lazy = true },
     },
     event = 'LspAttach',
     opts = {
-      ui = {border = 'rounded'},
+      ui = { border = 'rounded' },
       symbol_in_winbar = {
         enable = true,
         folder_level = 2,
@@ -105,7 +105,7 @@ return {
       {
         '<leader>ga',
         '<cmd>Lspsaga code_action<CR>',
-        mode = {'n', 'v'},
+        mode = { 'n', 'v' },
         desc = 'Show code action (lspsaga)',
       },
     },
@@ -140,19 +140,19 @@ return {
 
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
         vim.lsp.handlers.hover,
-        {border = 'rounded', title = 'Hover'}
+        { border = 'rounded', title = 'Hover' }
       )
 
       vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
         vim.lsp.handlers.signature_help,
-        {border = 'rounded'}
+        { border = 'rounded' }
       )
     end,
     config = function()
       local mason = require('mason')
 
       mason.setup({
-        ui = {border = 'rounded'}
+        ui = { border = 'rounded' }
       })
 
       local function on_attach(_, bufnr)
@@ -161,7 +161,7 @@ return {
             desc = 'LSP: ' .. desc
           end
 
-          vim.keymap.set('n', keys, func, {buffer = bufnr, desc = desc})
+          vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
         end
 
         nmap('<leader>rn', vim.lsp.buf.rename, 'Rename')
@@ -184,7 +184,7 @@ return {
           print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end, 'Workspace List Folders')
         nmap('<leader>f', function()
-          require('conform').format({async = true, lsp_fallback = true})
+          require('conform').format({ async = true, lsp_fallback = true })
         end, 'Format current buffer with LSP')
 
         -- Create a command `:Format` local to the LSP buffer
@@ -193,12 +193,12 @@ return {
           if args.count ~= -1 then
             local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
             range = {
-              start = {args.line1, 0},
-              ['end'] = {args.line2, end_line:len()},
+              start = { args.line1, 0 },
+              ['end'] = { args.line2, end_line:len() },
             }
           end
-          require('conform').format({async = true, lsp_fallback = true, range = range})
-        end, {range = true})
+          require('conform').format({ async = true, lsp_fallback = true, range = range })
+        end, { range = true })
       end
 
       local mason_lspconfig = require('mason-lspconfig')
@@ -223,11 +223,11 @@ return {
         efm = {},
         lua_ls = {
           Lua = {
-            workspace = {checkThirdParty = false},
-            telemetry = {enable = false},
-            completion = {callSnippet = 'Replace'},
+            workspace = { checkThirdParty = false },
+            telemetry = { enable = false },
+            completion = { callSnippet = 'Replace' },
             diagnostics = {
-              globals = {'vim'},
+              globals = { 'vim' },
             },
             format = {
               enable = true,
@@ -248,9 +248,9 @@ return {
               'babelrc.json'
             },
           },
-          validate = {enable = true},
+          validate = { enable = true },
         },
-        eslint = {format = false},
+        eslint = { format = false },
         emmet_language_server = {},
         tsserver = {},
       }
@@ -300,7 +300,7 @@ return {
                 function()
                   local params = {
                     command = '_typescript.organizeImports',
-                    arguments = {vim.api.nvim_buf_get_name(0)},
+                    arguments = { vim.api.nvim_buf_get_name(0) },
                     title = '',
                   }
                   vim.lsp.buf.execute_command(params)
@@ -353,7 +353,7 @@ return {
 
       -- ########################### TYPESCRIPT ###########################
       local function typescript_keymap(user_command, lsp_command, description)
-        vim.keymap.set('n', user_command, lsp_command, {desc = 'Typescript: ' .. description})
+        vim.keymap.set('n', user_command, lsp_command, { desc = 'Typescript: ' .. description })
       end
 
       typescript_keymap('<leader>to', ':OrganizeImports<CR>', 'Organize imports')
@@ -370,7 +370,7 @@ return {
         if not winid then
           vim.lsp.buf.hover()
         end
-      end, {desc = 'LSP: Show hover documentation and folded code'})
+      end, { desc = 'LSP: Show hover documentation and folded code' })
     end,
   },
 }

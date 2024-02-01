@@ -18,10 +18,10 @@ return {
     local luasnip = require('luasnip')
 
     require('luasnip/loaders/from_vscode').lazy_load({
-      paths = {'~/.config/nvim/snippets'}
+      paths = { '~/.config/nvim/snippets' }
     });
 
-    local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
+    local cmp_select_opts = { behavior = cmp.SelectBehavior.Select }
 
 
     cmp.setup({
@@ -35,7 +35,7 @@ return {
         documentation = cmp.config.window.bordered(),
       },
       mapping = {
-        ['<CR>'] = cmp.mapping.confirm({select = true, behavior = cmp.ConfirmBehavior.Replace}),
+        ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
@@ -50,29 +50,32 @@ return {
           else
             fallback()
           end
-        end, {'i', 's'}),
+        end, { 'i', 's' }),
         ['<S-Tab>'] = cmp.mapping(function(fallback)
           if luasnip.jumpable(-1) then
             luasnip.jump(-1)
           else
             fallback()
           end
-        end, {'i', 's'}),
+        end, { 'i', 's' }),
       },
       sources = cmp.config.sources({
-        {name = 'nvim_lsp'},
-        {name = 'luasnip'},
-      }, {
-        {name = 'buffer'},
-        {name = 'emoji'},
-        {name = 'calc'},
-        {name = 'path'},
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+        { name = 'buffer' },
+        { name = 'emoji' },
+        { name = 'calc' },
+        { name = 'path' },
+        { name = 'cmp' },
+        { name = 'codeium' }
       }),
       formatting = {
-        fields = {'menu', 'abbr', 'kind'},
+        expandable_indicator = '~',
+        fields = { 'menu', 'abbr', 'kind' },
         format = lspkind.cmp_format({
           maxwidth = 200,
           ellipsis_char = '...',
+          symbol_map = { Codeium = "" },
           before = function(entry, item)
             local menu_icon = {
               nvim_lsp = 'λ',
@@ -105,10 +108,10 @@ return {
     })
 
     -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline({'/', '?'}, {
+    cmp.setup.cmdline({ '/', '?' }, {
       mapping = cmp.mapping.preset.cmdline(),
       sources = {
-        {name = 'buffer'},
+        { name = 'buffer' },
       }
     })
 
@@ -116,9 +119,9 @@ return {
     cmp.setup.cmdline(':', {
       mapping = cmp.mapping.preset.cmdline(),
       sources = cmp.config.sources({
-        {name = 'path'}
+        { name = 'path' }
       }, {
-        {name = 'cmdline'}
+        { name = 'cmdline' }
       })
     })
 

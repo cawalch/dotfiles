@@ -28,14 +28,14 @@ return {
     end,
     format_after_save = { lsp_fallback = true },
   },
-  config = function(_, opts)
+  config = function(self, opts)
     local conform = require('conform')
     local util = require('conform.util')
 
     conform.setup(opts)
 
     -- Customize prettier args
-    require('conform.formatters.prettier').args = function(ctx)
+    require('conform.formatters.prettier').args = function(self, ctx)
       local args = { '--stdin-filepath', '$FILENAME' }
       local localPrettierConfig = vim.fs.find('.prettierrc.json', {
         upward = true,
