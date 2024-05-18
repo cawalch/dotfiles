@@ -175,7 +175,8 @@ return {
         nmap(']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next diagnostic')
         nmap('<leader>td', vim.lsp.buf.type_definition, 'Type Definition')
         nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
-        nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace Symbols')
+        nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols,
+          'Workspace Symbols')
         nmap('<leader>hd', vim.lsp.buf.hover, 'Hover Documentation')
         nmap('<leader>sd', vim.lsp.buf.signature_help, 'Signature Documentation')
         nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, 'Workspace Add Folder')
@@ -191,7 +192,8 @@ return {
         vim.api.nvim_create_user_command('Format', function(args)
           local range = nil
           if args.count ~= -1 then
-            local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+            local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args
+              .line2, true)[1]
             range = {
               start = { args.line1, 0 },
               ['end'] = { args.line2, end_line:len() },
@@ -219,8 +221,9 @@ return {
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       local servers = {
+        html = {},
         cssls = {},
-        efm = {},
+        -- efm = {},
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -251,7 +254,7 @@ return {
           validate = { enable = true },
         },
         eslint = { format = false },
-        emmet_language_server = {},
+        -- emmet_language_server = {},
         tsserver = {},
       }
 
@@ -314,7 +317,8 @@ return {
                   vim.ui.input({
                       prompt = 'Source: ',
                       completion = 'file',
-                      default = vim.api.nvim_buf_get_name(0)
+                      default = vim.api
+                          .nvim_buf_get_name(0)
                     },
                     function(input)
                       source_file = input

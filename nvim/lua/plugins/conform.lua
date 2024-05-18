@@ -24,7 +24,7 @@ return {
         return
       end
 
-      return { timeout_ms = 500, lsp_fallback = true, async = true }
+      return { timeout_ms = 500, lsp_fallback = true, format_after_save = true }
     end,
     format_after_save = { lsp_fallback = true },
   },
