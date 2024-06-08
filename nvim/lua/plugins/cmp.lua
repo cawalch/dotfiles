@@ -61,21 +61,22 @@ return {
       },
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
+        { name = "supermaven" },
         { name = 'luasnip' },
         { name = 'buffer' },
         { name = 'emoji' },
         { name = 'calc' },
         { name = 'path' },
         { name = 'cmp' },
-        { name = 'codeium' }
+        -- { name = 'codeium' }
       }),
       formatting = {
-        expandable_indicator = '~',
+        expandable_indicator = true,
         fields = { 'menu', 'abbr', 'kind' },
         format = lspkind.cmp_format({
           maxwidth = 200,
           ellipsis_char = '...',
-          symbol_map = { Codeium = "" },
+          -- symbol_map = { Codeium = "" },
           before = function(entry, item)
             local menu_icon = {
               nvim_lsp = 'λ',
