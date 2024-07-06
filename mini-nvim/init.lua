@@ -96,6 +96,7 @@ later(load("zk-org/zk-nvim",                     { init = "plugins.zk" }))
 later(load("stevearc/conform.nvim",              { init = "plugins.conform" }))
 later(load("mfussenegger/nvim-lint",             { init = "plugins.nvim-lint"}))
 later(load("MeanderingProgrammer/markdown.nvim", { init = "plugins.render-markdown"}))
+later(load("supermaven-inc/supermaven-nvim",    { init = "plugins.supermaven"}))
 
 later(load("nvim-treesitter/nvim-treesitter", {
   init = "plugins.treesitter",
@@ -107,7 +108,25 @@ later(load("nvim-treesitter/nvim-treesitter-context", {
   setup = {},
 }))
 
-later(load("hrsh7th/nvim-cmp", {
+local lsp = vim.lsp
+
+local make_client_capabilities = lsp.protocol.make_client_capabilities
+
+function lsp.protocol.make_client_capabilities()
+    local caps = make_client_capabilities()
+    if not (caps.workspace or {}).didChangeWatchedFiles then
+        vim.notify(
+            'lsp capability didChangeWatchedFiles is already disabled',
+            vim.log.levels.WARN
+        )
+    else
+        caps.workspace.didChangeWatchedFiles = nil
+    end
+
+    return caps
+end
+
+now(load("hrsh7th/nvim-cmp", {
   init = "plugins.cmp",
   add = {
     depends = {
@@ -119,7 +138,7 @@ later(load("hrsh7th/nvim-cmp", {
   },
 }))
 
-later(load("neovim/nvim-lspconfig", {
+now(load("neovim/nvim-lspconfig", {
   init = "plugins.lspconfig",
   add = {
     depends = {
