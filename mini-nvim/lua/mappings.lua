@@ -34,6 +34,8 @@ nmap([[\C]],       C"lua require('reticle').toggle_cursorcolumn()", "Toggle 'cur
 nmap([[\f]],       C"FormatToggle",                                 "Toggle auto-format")
 -- Cannot use <Cmd> or mini.map will not refresh.
 nmap([[\h]],       ":let v:hlsearch = 1 - v:hlsearch<CR>",          "Toggle hlsearch")
+-- toggle supermaven without a conflicting mapping
+nxmap(L "ai",       C"lua require('supermaven-nvim.api').toggle()",      "Toggle supermaven")
 nmap([[\i]],       C"lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())", "Toggle inlay hints")
 nmap("<C-w>m",     C"lua MiniMisc.zoom()",                          "Zoom buffer")
 
@@ -47,6 +49,7 @@ nmap(L"bw",  C"lua require('mini.bufremove').wipeout()",          "Wipeout buffe
 nmap(L"cd",  C"lua vim.diagnostic.open_float()",                  "Show diagnostic messages")
 nmap(L"cr",  C"lua vim.lsp.buf.rename()",                         "Rename symbol")
 nmap(L"ca",  C"lua vim.lsp.buf.code_action()",                    "Code Action")
+nmap(L "ch", C"InlayHintsToggle", "Toggle TS inlay hints")
 nmap(L"fE",  C"lua require('plugins.mini.files').cwd()",          "File explorer (cwd)")
 nmap(L"fL",  C"lua MiniVisits.remove_label()",                    "Remove label")
 nmap(L"fV",  C"Pick visit_labels",                                "Find visited labels")
@@ -68,6 +71,7 @@ nmap(L"gL",  C"Git hist --all",                                   "Git history (
 nmap(L"go",  C"lua MiniDiff.toggle_overlay()",                    "Toggle diff")
 nmap(L"gq",  C"lua require('plugins.mini.diff').to_qf()",         "Quickfix diffs")
 nxmap(L"gs", C"lua MiniGit.show_at_cursor()",                     "MiniGit show at cursor")
+nxmap(L"grh",  C"lua MiniGit.show_range_history()",                      "MiniGit range history")
 nmap(L"mc",  C"lua MiniMap.close()",                              "Close")
 nmap(L"mf",  C"lua MiniMap.toggle_focus()",                       "Open")
 nmap(L"mr",  C"lua MiniMap.refresh()",                            "Refresh")

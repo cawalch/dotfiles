@@ -1,13 +1,13 @@
 local H = {}
 
-require("mini.statusline").setup({
+require("mini.statusline").setup {
   use_icons = true,
   content = {
     inactive = function()
-      local pathname = H.section_pathname({ trunc_width = 120 })
-      return MiniStatusline.combine_groups({
+      local pathname = H.section_pathname { trunc_width = 120 }
+      return MiniStatusline.combine_groups {
         { hl = "MiniStatuslineInactive", strings = { pathname } },
-      })
+      }
     end,
     active = function()
       -- stylua: ignore start
@@ -16,6 +16,7 @@ require("mini.statusline").setup({
       local diff          = MiniStatusline.section_diff({ trunc_width = 60 })
       local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 60 })
       local lsp           = MiniStatusline.section_lsp({ trunc_width = 40 })
+      local supermaven    = H.section_supermaven_status({ trunc_width = 40 })
       local filetype      = H.section_filetype({ trunc_width = 70 })
       local location      = H.section_location({ trunc_width = 120 })
       local search        = H.section_searchcount({ trunc_width = 80 })
@@ -29,17 +30,20 @@ require("mini.statusline").setup({
       -- sections, etc.)
       return MiniStatusline.combine_groups({
         { hl = mode_hl,                   strings = { mode:upper() } },
+        { ht = mode_hl,                   strings = { supermaven } },
         { hl = 'MiniStatuslineDevinfo',   strings = { git, diff } },
+
         '%<', -- Mark general truncate point
         { hl = 'MiniStatuslineDirectory', strings = { pathname } },
         '%=', -- End left alignment
         { hl = 'MiniStatuslineFileinfo',  strings = { filetype, diagnostics, lsp } },
+
         { hl = mode_hl,                   strings = { search .. location } },
       })
       -- stylua: ignore end
     end,
   },
-})
+}
 
 -- Utility from mini.statusline
 H.isnt_normal_buffer = function()
@@ -57,7 +61,7 @@ H.get_filetype_icon = function()
     return ""
   end
 
-  local file_name, file_ext = vim.fn.expand("%:t"), vim.fn.expand("%:e")
+  local file_name, file_ext = vim.fn.expand "%:t", vim.fn.expand "%:e"
   return devicons.get_icon(file_name, file_ext, { default = true })
 end
 
@@ -131,7 +135,7 @@ H.section_pathname = function(args)
     return "%t"
   end
 
-  local path = vim.fn.expand("%:p")
+  local path = vim.fn.expand "%:p"
   local cwd = vim.uv.cwd() or ""
   cwd = vim.uv.fs_realpath(cwd) or ""
 
@@ -158,4 +162,14 @@ H.section_pathname = function(args)
     file_hl = "%#" .. args.filename_hl .. "#"
   end
   return dir .. file_hl .. file
+end
+
+H.section_supermaven_status = function(args)
+  local icon_running = "󰢩" -- Icon when SuperMaven is running
+  local icon_stopped = "󰅛"
+  if require("supermaven-nvim.api").is_running() then
+    return icon_running
+  else
+    return icon_stopped
+  end
 end

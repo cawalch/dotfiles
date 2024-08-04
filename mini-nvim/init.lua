@@ -47,6 +47,7 @@ now(load("plugins.mini.basics"))
 now(load("plugins.mini.notify"))
 now(load("plugins.mini.sessions"))
 now(load("plugins.mini.starter"))
+now(load("supermaven-inc/supermaven-nvim",    { init = "plugins.supermaven"}))
 now(load("plugins.mini.statusline"))
 now(load("mini.tabline", { setup = {} }))
 
@@ -96,7 +97,6 @@ later(load("zk-org/zk-nvim",                     { init = "plugins.zk" }))
 later(load("stevearc/conform.nvim",              { init = "plugins.conform" }))
 later(load("mfussenegger/nvim-lint",             { init = "plugins.nvim-lint"}))
 later(load("MeanderingProgrammer/markdown.nvim", { init = "plugins.render-markdown"}))
-later(load("supermaven-inc/supermaven-nvim",    { init = "plugins.supermaven"}))
 
 later(load("nvim-treesitter/nvim-treesitter", {
   init = "plugins.treesitter",
@@ -113,18 +113,20 @@ local lsp = vim.lsp
 local make_client_capabilities = lsp.protocol.make_client_capabilities
 
 function lsp.protocol.make_client_capabilities()
-    local caps = make_client_capabilities()
-    if not (caps.workspace or {}).didChangeWatchedFiles then
-        vim.notify(
-            'lsp capability didChangeWatchedFiles is already disabled',
-            vim.log.levels.WARN
-        )
-    else
-        caps.workspace.didChangeWatchedFiles = nil
-    end
+  local caps = make_client_capabilities()
+  if not (caps.workspace or {}).didChangeWatchedFiles then
+    vim.notify(
+      'lsp capability didChangeWatchedFiles is already disabled',
+      vim.log.levels.WARN
+    )
+  else
+    caps.workspace.didChangeWatchedFiles = nil
+  end
 
-    return caps
+  return caps
 end
+
+now( load("MysticalDevil/inlay-hints.nvim", { init = "plugins.inlay-hints" }))
 
 now(load("hrsh7th/nvim-cmp", {
   init = "plugins.cmp",
