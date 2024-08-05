@@ -49,6 +49,7 @@ nmap(L"bw",  C"lua require('mini.bufremove').wipeout()",          "Wipeout buffe
 nmap(L"cd",  C"lua vim.diagnostic.open_float()",                  "Show diagnostic messages")
 nmap(L"cr",  C"lua vim.lsp.buf.rename()",                         "Rename symbol")
 nmap(L"ca",  C"lua vim.lsp.buf.code_action()",                    "Code Action")
+nmap(L "co", C'lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})', "Organize imports")
 nmap(L "ch", C"InlayHintsToggle", "Toggle TS inlay hints")
 nmap(L"fE",  C"lua require('plugins.mini.files').cwd()",          "File explorer (cwd)")
 nmap(L"fL",  C"lua MiniVisits.remove_label()",                    "Remove label")
