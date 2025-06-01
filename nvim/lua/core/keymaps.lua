@@ -32,17 +32,24 @@ map("n", "<leader>rr", reload_config, { desc = "Reload configuration" })
 -- Window navigation (CHANGED: Use different key for vertical movement)
 map("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
-map("n", "<C-Up>", "<C-w>k", { desc = "Move to top window" }) -- CHANGED from <C-k>
+map("n", "<C-Up>", "<C-w>k", { desc = "Move to top window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Quickfix navigation
+map("n", "[q", ":cprev<CR>", { desc = "Previous quickfix" })
+map("n", "]q", ":cnext<CR>", { desc = "Next quickfix" })
 
 -- Buffer management
 map("n", "<leader>bd", ":bdelete<CR>", { desc = "Delete buffer" })
 map("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })
 map("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous buffer" })
+-- Use Shift + h/l for buffer navigation
+map("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer" })
+map("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
 
--- Quick save/quit (CHANGED: Use different key for quit)
+-- Quick save/quit
 map("n", "<leader>w", ":w<CR>", { desc = "Save file" })
-map("n", "<leader>qq", ":q<CR>", { desc = "Quit" }) -- CHANGED from <leader>q
+map("n", "<leader>qq", ":q<CR>", { desc = "Quit" })
 
 -- Clear search highlighting
 map("n", "<Esc>", ":nohlsearch<CR>", { desc = "Clear search highlighting" })
@@ -57,10 +64,15 @@ map("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
 map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
+-- Escape from insert mode
+vim.keymap.set("i", "jk", "<ESC>", { noremap = true, silent = true })
+vim.opt.timeoutlen = 300
+
 -- Terminal
 map("n", "<leader>tt", function()
   vim.cmd "split | terminal"
 end, { desc = "Open terminal" })
+map("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 local builtin = require "telescope.builtin"
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
@@ -76,7 +88,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- set keybinds
     opts.desc = "Show LSP references"
-    keymap.set("n", "gR", "cmdTelescope lsp_references<CR>", opts) -- show definition, references
+    keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
     opts.desc = "Go to declaration"
     keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
@@ -97,10 +109,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
 
     opts.desc = "Show buffer diagnostics"
-    keymap.set("n", "<leader>D)", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
+    keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
 
     opts.desc = "Show line diagnostics"
-    keymap.set("n", "<leader>d)", vim.diagnostic.open_float, opts) -- show diagnostics for line
+    keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 
     opts.desc = "Go to previous diagnostic"
     keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer

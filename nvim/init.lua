@@ -21,7 +21,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = ","
 
 -- Setup lazy.nvim
 require("lazy").setup {
@@ -34,5 +34,3 @@ require("lazy").setup {
 
 require "core.autocommands"
 require "core.keymaps"
-
-vim.cmd("colorscheme cyberdream")

@@ -10,27 +10,74 @@ return {
   },
   {
     "mason-org/mason.nvim",
+    opts = {},
   },
   {
     "mason-org/mason-lspconfig.nvim",
-    opts = {},
-    dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
-      "neovim/nvim-lspconfig",
-    },
-    ensure_installed = {
-      "bashls",
-      "lua_ls",
-      "ts_ls",
-      "ast_grep",
-      "gopls",
+    opts = {
+      ensure_installed = {
+        "bashls",
+        "lua_ls",
+        "ts_ls",
+        "ast_grep",
+        "gopls",
+      },
+      handlers = {
+        -- Default handler for all servers
+        function(server_name)
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+          require("lspconfig")[server_name].setup {
+            capabilities = capabilities,
+          }
+        end,
+        -- Custom handlers for specific servers
+        ["lua_ls"] = function()
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+          require("lspconfig").lua_ls.setup {
+            capabilities = capabilities,
+            settings = {
+              Lua = {
+                diagnostics = { globals = { "vim" } },
+                completion = { callSnippet = "Replace" },
+              },
+            },
+          }
+        end,
+        ["gopls"] = function()
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+          require("lspconfig").gopls.setup {
+            capabilities = capabilities,
+            settings = {
+              gopls = {
+                staticcheck = false,
+                gofumpt = true,
+              },
+            },
+          }
+        end,
+        ["ts_ls"] = function()
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+          require("lspconfig").ts_ls.setup {
+            capabilities = capabilities,
+            settings = {
+              typescript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                },
+              },
+            },
+          }
+        end,
+      },
     },
   },
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPre", "BufNewFile" },
     build = ":TSUpdate",
-    run = ":TSUpdate",
     dependencies = {
       "windwp/nvim-ts-autotag",
     },
@@ -79,7 +126,6 @@ return {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
@@ -129,11 +175,11 @@ return {
           ["<CR>"] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         },
         sources = cmp.config.sources {
-          { name = "nvim_lsp", max_item_count = 10 },
-          { name = "codecompanion", max_item_count = 10 },
-          { name = "luasnip", max_item_count = 5 },
-          { name = "buffer", max_item_count = 8 },
-          { name = "path", max_item_count = 5 },
+          { name = "nvim_lsp", priority = 1000, max_item_count = 10 },
+          { name = "codecompanion", priority = 900, max_item_count = 10 },
+          { name = "luasnip", priority = 800, max_item_count = 5 },
+          { name = "buffer", priority = 500, max_item_count = 8 },
+          { name = "path", priority = 250, max_item_count = 5 },
         },
         formatting = {
           format = lspkind.cmp_format {
@@ -163,29 +209,19 @@ return {
     end,
   },
   {
+    "vuki656/package-info.nvim",
+    ft = "json",
+    dependencies = "MunifTanjim/nui.nvim",
+    config = function()
+      require("package-info").setup()
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       local cmp_nvim_lsp = require "cmp_nvim_lsp"
-      local capabilities = cmp_nvim_lsp.default_capabilities()
-      vim.lsp.config("lua_ls", {
-        settings = {
-          ["lua_ls"] = {
-            capabilities = capabilities,
-            filetypes = { "lua" },
-            settings = {
-              Lua = {
-                diagnostics = {
-                  globals = { "vim" },
-                },
-                completion = {
-                  callSnippet = "Replace",
-                },
-              },
-            },
-          },
-        },
-      })
 
+      -- Your diagnostic config remains the same
       vim.diagnostic.config {
         signs = {
           numhl = {
@@ -260,29 +296,6 @@ return {
     end,
   },
   {
-    "stevearc/conform.nvim",
-    config = function()
-      require("conform").setup {
-        format_on_save = {
-          timeout_ms = 500,
-          lsp_format = "fallback",
-        },
-        formatters_by_ft = {
-          lua = { "stylua" },
-          javascript = { "biome" },
-          typescript = { "biome" },
-          css = { "prettier" },
-          python = { "black" },
-          json = { "biome" },
-          yaml = { "prettier" },
-          html = { "prettier" },
-          sh = { "shfmt" },
-          go = { "gofmt", "golines" },
-        },
-      }
-    end,
-  },
-  {
     "nvimtools/none-ls.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
@@ -305,6 +318,11 @@ return {
         null_ls.builtins.formatting.gofmt,
         null_ls.builtins.diagnostics.golangci_lint,
         null_ls.builtins.diagnostics.staticcheck,
+
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.shfmt,
+        null_ls.builtins.formatting.golines,
       }
 
       -- formatting on save
@@ -372,6 +390,7 @@ return {
   },
   {
     "tpope/vim-fugitive",
+    cmd = { "Git", "G" },
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -487,5 +506,8 @@ return {
     "scottmckendry/cyberdream.nvim",
     lazy = false,
     priority = 1000,
+    config = function()
+      vim.cmd.colorscheme "cyberdream"
+    end,
   },
 }
