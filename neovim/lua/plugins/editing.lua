@@ -44,7 +44,7 @@ local on_attach_custom = function(client, bufnr)
     local navic_is_available, navic = pcall(require, "nvim-navic")
     if navic_is_available then
       navic.attach(client, bufnr)
-      vim.api.nvim_buf_set_option(bufnr, "winbar", "%{%v:lua.require'nvim-navic'.get_location()%}")
+      vim.api.nvim_set_option_value("winbar", "%{%v:lua.require'nvim-navic'.get_location()%}", { buf = bufnr })
     else
       vim.notify("nvim-navic not found, winbar not set.", vim.log.levels.WARN)
     end
